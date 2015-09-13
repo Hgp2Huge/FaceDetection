@@ -1,0 +1,38 @@
+// cascade_filename		File name to save the trained cascade classifier
+data\cascade.txt
+// positive_filename	Dir	name of the positive training set
+data\positive
+// negative_dirname		Dir name of the negative training set 
+data\negative
+// boosting_dirname			Dir name of the face images for boosting
+data\positive_boosted
+// boosting_dirname			Dir name of the nonface images for boosting
+data\negative_boosted
+// gCombine_min
+20
+// gBoostedp
+0
+// gdelta
+0.001
+// galpha
+0.006
+// sx				Width of input training image
+40
+// sy				Height of input training image
+40
+// max_nodes			How many nodes are allowed?
+50
+// gFPR 				over all FPR
+0.000001
+// gHitrate			minimum hit-rate per stage
+0.998
+// gTotalX_Plus number of train files for each cascade
+8774
+// gsampled			number of train files for positive(negative) for each turn in adaboost
+960
+// nof				How many features in each node?
+004 004 004 128 128 128 128 128 128 128
+128 128 128 128 128 128 128 128 128 128
+128 128 128 128 128 128 128 128 128 128
+128 128 128 128 128 128 128 128 128 128
+128 128 128 128 128 128 128 128 128 128

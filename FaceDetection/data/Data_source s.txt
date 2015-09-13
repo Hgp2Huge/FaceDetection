@@ -1,0 +1,11 @@
+positive£º
+LFW
+
+negative£º
+An Analysis of the Viola-Jones Face Detection Algorithm-facedata/nonface 
+
+
+negative_boosted£º
+Caltech101
+An Analysis of the Viola-Jones Face Detection Algorithm-facedata/non-skin-images
+
