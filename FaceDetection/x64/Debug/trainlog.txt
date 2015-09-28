@@ -1,6 +1,0 @@
-InitTrain sucessed!
-facecount:0 nonfacecount:0
-
- Start training 
- Stage#:1
- adding one adaboostclassifier:

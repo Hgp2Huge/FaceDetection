@@ -138,7 +138,7 @@ void CascadeClassifier::FaceDetect_ScaleImage(FDImage& original/*,const CString 
 	//detectionfile.open("data/dete.txt");
 	//procface.Copy(original);
 
-	ratio = 2.0;
+	ratio = 1.2;
 	original.Resize(procface,ratio);
 	results.clear();
 //	REAL paddedsize = REAL(1)/REAL((sx+1)*(sy+1));
@@ -284,49 +284,51 @@ void CascadeClassifier::FaceDetect_ScaleTempl(FDImage& original/*,const CString 
 int CascadeClassifier::FaceDetectWithRet(FDImage& original,const string filename) 
 {
 	FDImage procface;
-	FDImage image,square;
-	double value;
 	int result;
 	CRect rect;
 	REAL ratio;
 	vector<CRect> results;
-
-	ratio = 2.0;
-	original.Resize(procface,ratio);
+	ofstream detectionfile;
+	//detectionfile.open("data/dete.txt");
+	procface.Copy(original);
+	//original.Resize(procface,2.0);
+	procface.CalcgradientImage();
+	procface.calcintegralImage();
+	procface.cleartmp();
+	ratio = 1;
 	results.clear();
-	while((procface.height+1>sx+1) && (procface.width+1>sy+1))
+	//detectionfile << "image size" << procface.height << " " <<procface.width << endl;
+	while((procface.height>(sx)*ratio) && (procface.width>(sy)*ratio))
 	{
-		procface.CalcgradientImage();
-		procface.calcintegralImage();
-		procface.cleartmp();
-		for(int i=0,size_x=procface.height+1-sx;i<size_x;i+=2)
-			for(int j=0,size_y=procface.width+1-sy;j<size_y;j+=2){
-
+		//detectionfile << "sub window size" << (sx+1)*ratio << " " << (sy+1)*ratio<<endl;
+		//	detectionfile << "sub window pos:" << endl;
+		int nstep = (int)(ratio*sx)/20;
+		for(int i=0,size_x=(int)procface.height-(sx*ratio);i<size_x;i+=nstep)
+			for(int j=0,size_y=(int)procface.width-(sy*ratio);j<size_y;j+=nstep){
+				///detectionfile << "(" << i << "," << j <<")" <<endl;	
 				result = 1;
 				for(int k=0;k<count;k++)
 				{
-					value = 0.0;
+					double value = 0.0;
+					//	detectionfile << "stage: " << k << endl;
 					for(int t=0,size=strongClassifiers[k].count;t<size;t++)
 					{
-
+						//	REAL f1 = 0;
+						//	REAL** p = image.data + i;
 						double yfea=0.0;
 						WeakClassifier& s = strongClassifiers[k].weakClassifiers[t];;
 						double tfea[32];
-
-						getFeatureDescriptor(procface,tfea,s.x+j,s.y+i,s.rh,s.rw);
+						//	detectionfile << "patch size and pos" << s.x+j << " " << s.y+i << " " << s.rh*ratio<<" " << s.rw*ratio<< ' '<< (double)s.rh/s.rw << endl;
+						getFeatureDescriptor(procface,tfea,j+s.x*ratio,i+s.y*ratio,s.rh*ratio,s.rw*ratio/*,(double)s.rh/s.rw*/);
 
 						yfea += s.weights[0];
-
-						for(int u =0; u < 32;u++){
+						for(int u =0; u < 32;u++)
 							yfea += tfea[u]*s.weights[u+1];
-
-						}
-
 						value += sigmoid(yfea);
- 
+						//		detectionfile << "classifier: " << t <<  "yfea: " << yfea << "value: " << value <<endl;   
 					}
-					value /=(double)strongClassifiers[k].count;
-
+					value /= (double)strongClassifiers[k].count;
+					//	detectionfile << "value: " << value << "thresh: " << strongClassifiers[k].thresh << endl;
 					if(value <= strongClassifiers[k].thresh){
 						result = 0;
 						break;
@@ -334,17 +336,16 @@ int CascadeClassifier::FaceDetectWithRet(FDImage& original,const string filename
 				}
 				if(result!=0) 
 				{
-					const REAL r = 1.0/ratio;
-					rect.left = (LONG)(j*r);rect.top = (LONG)(i*r);
-					rect.right = (LONG)((j+sx)*r);rect.bottom = (LONG)((i+sy)*r);
+					rect.left = (LONG)(j);rect.top = (LONG)(i);
+					rect.right = (LONG)(j+sx*ratio);rect.bottom = (LONG)(i+sy*ratio);
 					results.push_back(rect);
-
+					//detectionfile << "value: " << value << "thresh: " << strongClassifiers[k].thresh << endl;
 				}
 			}
-			ratio = ratio*0.8;
-			procface.Clear();
-			original.Resize(procface,ratio);
+		ratio = ratio*1.2;
 	}
+
+	//total_fp += results.size();
 
 	PostProcess(results,gCombine_min);
 	PostProcess(results,0);

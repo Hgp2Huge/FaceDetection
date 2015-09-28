@@ -9,7 +9,7 @@ data\positive_boosted
 // boosting_dirname			Dir name of the nonface images for boosting
 data\negative_boosted
 // gCombine_min
-20
+12
 // gBoostedp
 0
 // gdelta

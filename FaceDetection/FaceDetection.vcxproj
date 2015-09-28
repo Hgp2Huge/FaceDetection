@@ -99,6 +99,8 @@
     <IncludePath>E:\Software\opencv\build\include;E:\Software\opencv\build\include\opencv;E:\Software\opencv\build\include\opencv2;$(IncludePath)</IncludePath>
     <ExecutablePath>E:\Software\opencv\build\x64\vc10\bin;$(ExecutablePath)</ExecutablePath>
     <IgnoreImportLibrary>false</IgnoreImportLibrary>
+    <IntDir>$(Platform)\cache</IntDir>
+    <OutDir>$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Itanium'">
     <LinkIncremental>false</LinkIncremental>
