@@ -7,7 +7,9 @@ Adaboost + SURF + Logistic Regression + Stochastic Gradient
 
 ##Example:  
 Frontal Face  
-
+![](https://raw.githubusercontent.com/raoqiyu/FaceDetection/master/FaceDetection/img/50f7671c5c45c.png_result.JPG)
+![](https://raw.githubusercontent.com/raoqiyu/FaceDetection/master/FaceDetection/img/090006h8tutgnyrnhbf3tt.jpg_result.JPG)
+![](https://raw.githubusercontent.com/raoqiyu/FaceDetection/master/FaceDetection/img/3970232_191854005020_2.jpg_result.JPG)
 
 ##Training Set:  
 Positive:	LFW  
